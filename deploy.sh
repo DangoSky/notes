@@ -19,10 +19,10 @@ git commit -m 'update notes'
 # git push -f git@github.com:dangosky/notes.git master:gh-pages
 
 # 如果发布到 https://<USERNAME>.github.io  USERNAME=你的用户名 
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+git push -f git@github.com:DangoSky/DangoSky.github.io.git master
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>  REPO=github上的项目
-git push -f git@github.com:DangoSky/notes.git master:gh-pages
+# git push -f git@github.com:DangoSky/notes.git master:gh-pages
 
 cd -
 
