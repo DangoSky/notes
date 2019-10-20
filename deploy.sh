@@ -16,6 +16,6 @@ git add -A
 git commit -m 'update notes'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:dangosky>/<notes>.git master:gh-pages
+git push -f git@github.com:dangosky/notes.git master:gh-pages
 
 cd -
