@@ -5,7 +5,7 @@ set -e
 
 git add -A
 git commit -m 'update notes'
-git push
+git push origin master
 
 # 生成静态文件
 yarn build
