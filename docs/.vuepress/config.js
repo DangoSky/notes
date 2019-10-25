@@ -13,6 +13,20 @@ module.exports = {
     sidebarDepth: 2,
     sidebar: [
       {
+        title: 'JavaScript',
+        children: [
+          '/JavaScript/Promise.md',
+          '/JavaScript/Iterator和Generator.md',
+          '/JavaScript/async.md',
+          '/JavaScript/网络.md',
+        ]
+      }, {
+        title: 'TypeScript',
+        children: [
+          '/TypeScript/类.md',
+          '/TypeScript/泛型.md',
+        ]
+      }, {
         title: 'Vue',
         children: [
           '/Vue/基本.md',
@@ -43,6 +57,8 @@ module.exports = {
         title: 'Node',
         children: [
           '/Node/基本.md',
+          '/Node/npm.md',
+          '/Node/Events模块.md',
         ]
       }, {
         title: 'Mobx',
