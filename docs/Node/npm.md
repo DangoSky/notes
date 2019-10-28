@@ -8,8 +8,8 @@ npm init 用来初始化生成一个新的package.json文件。可以使用-f（
 
 ### npm install
 
-- –save：模块名将被添加到dependencies，可以简化为参数-S。
-- –save-dev： 模块名将被添加到devDependencies，可以简化为参数-D。
+- npm install 包名 --save(npm install 包名 -S)：模块名将被添加到dependencies，安装的包需要发布到生产环境的。
+- npm install 包名 --save-dev(npm install 包名 -D)： 模块名将被添加到devDependencies，安装的包只用于开发环境，不用于生产环境。
 
 npm install默认会安装dependencies字段和devDependencies字段中的所有模块，如果使用--production参数，可以只安装dependencies字段的模块。`npm install --production`。
 
@@ -26,3 +26,19 @@ npm install默认会安装dependencies字段和devDependencies字段中的所有
 ```
 
 上面代码指定npm test，实际运行mocha test/。如果要通过npm test命令，将参数传到mocha，则参数之前要加上两个连词线。`$ npm run test -- anothertest.js` 等同于 `$ mocha test/ anothertest.js`。
+
+### npm list -g
+
+查看全局已经安装过的node包。
+
+### npm config list
+
+查看配置信息。
+
+### npm info 指定包名
+
+查看远程npm上指定包的所有版本信息。
+
+### npm root
+
+查看当前包的安装路径。`npm root -g` 查看全局的包的安装路径。

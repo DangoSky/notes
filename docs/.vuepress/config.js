@@ -15,10 +15,16 @@ module.exports = {
       {
         title: 'JavaScript',
         children: [
+          '/JavaScript/基本.md',
+          '/JavaScript/DOM属性计算.md',
+          '/JavaScript/this.md',
           '/JavaScript/Promise.md',
           '/JavaScript/Iterator和Generator.md',
           '/JavaScript/async.md',
           '/JavaScript/网络.md',
+          '/JavaScript/通信.md',
+          '/JavaScript/模块化.md',
+          '/JavaScript/疑难杂症.md',
         ]
       }, {
         title: 'TypeScript',
@@ -59,6 +65,8 @@ module.exports = {
           '/Node/基本.md',
           '/Node/npm.md',
           '/Node/Events模块.md',
+          '/Node/中间层.md',
+          '/Node/服务端渲染和客户端渲染.md',
         ]
       }, {
         title: 'Mobx',
