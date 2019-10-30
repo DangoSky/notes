@@ -6,9 +6,8 @@ module.exports = {
   ],
   themeConfig: {
     nav: [
-      { text: 'JavaScript', link: '/' },
-      { text: 'React', link: '/guide/' },
-      { text: 'TypeScript', link: '/typescript' }
+      { text: 'Blog', link: 'http://blog.dangosky.com/' },
+      { text: 'Github', link: 'https://github.com/DangoSky' },
     ],
     sidebarDepth: 2,
     sidebar: [
@@ -24,7 +23,16 @@ module.exports = {
           '/JavaScript/网络.md',
           '/JavaScript/通信.md',
           '/JavaScript/模块化.md',
+          '/JavaScript/Storage.md',
           '/JavaScript/疑难杂症.md',
+        ]
+      }, {
+        title: 'CSS',
+        children: [
+          '/CSS/基本.md',
+          '/CSS/属性.md',
+          '/CSS/布局.md',
+          '/CSS/疑难杂症.md',
         ]
       }, {
         title: 'TypeScript',
@@ -84,6 +92,15 @@ module.exports = {
         title: 'Linux',
         children: [
           '/Linux/常用命令行.md',
+        ]
+      }, {
+        title: '计算机网络',
+        children: [
+          '/计算机网络/状态码.md',
+          '/计算机网络/报文.md',
+          '/计算机网络/get和post.md',
+          '/计算机网络/代理.md',
+          '/计算机网络/其他.md',
         ]
       }
     ]
