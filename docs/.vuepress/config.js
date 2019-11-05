@@ -58,6 +58,8 @@ module.exports = {
           '/React/生命周期.md',
           '/React/有问有答.md',
           '/React/踩坑指南.md',
+          '/React/组件通信.md',
+          '/React/其他.md',
           '/React/Hook.md',
           '/React/虚拟DOM.md',
         ]
@@ -73,7 +75,9 @@ module.exports = {
           '/Node/基本.md',
           '/Node/npm.md',
           '/Node/Events模块.md',
+          '/Node/Http模块.md',
           '/Node/中间层.md',
+          '/Node/Socket.IO.md',
           '/Node/服务端渲染和客户端渲染.md',
         ]
       }, {
