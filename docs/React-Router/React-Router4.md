@@ -42,7 +42,15 @@
 
 ## 动态导航的方法
   - 直接使用 `<Link to=“” />` 跳转路由。
-  - 使用 `withRouter` 的 history, 通过 `this.props.history.push(path)`跳转。
+  - 使用 `withRouter` 的 history, 通过 `this.props.history.push(obj)`跳转。
+
+```js
+// obj参数：
+{
+  pathname: '/home', // 目标路由的路径
+  state: values, // 要传的参数，不会出现在url中。在目标路由通过 this.props.location.state 接受，但props继承自 RouteComponentProps。
+};
+```
 
 
 ## 其他

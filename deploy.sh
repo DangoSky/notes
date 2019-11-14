@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
 
+var1=`date`
+
 # 确保脚本抛出遇到的错误
 set -e
 
 git add -A
-git commit -m 'update notes'
+git commit -m "update notes on $var1"
 git push origin master
 
 # 生成静态文件
@@ -19,7 +21,7 @@ echo 'notes.dangosky.com' > CNAME
 
 git init
 git add -A
-git commit -m 'deploy'
+git commit -m 'deploy notes on $var1'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
 git push -f https://github.com/DangoSky/notes.git master:gh-pages
