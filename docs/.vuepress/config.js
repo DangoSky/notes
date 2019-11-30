@@ -37,6 +37,10 @@ module.exports = {
       }, {
         title: 'TypeScript',
         children: [
+          '/TypeScript/接口.md',
+          '/TypeScript/类型.md',
+          '/TypeScript/配置.md',
+          '/TypeScript/声明文件.md',
           '/TypeScript/类.md',
           '/TypeScript/泛型.md',
         ]

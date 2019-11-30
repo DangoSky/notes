@@ -1,5 +1,1 @@
----
-home: true
-actionText: 温故而知新 →
-heroImage: /home.jpg
-actionLink: /home/
+### 但愿日子清净，抬头遇见的都是柔情~

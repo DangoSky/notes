@@ -11,16 +11,16 @@
 
 - 使用：
   - 在函数组件中使用state。返回当前状态和一个修改它的函数。useState的唯一一个参数就是初始的state，可以接受任意的数据类型。 `Const [count, setCount] = useState(0)`。可以直接用 count 来读取值，使用 `setCount(count + 1)` 来更新（这更新操作也是异步的）。
-  - setCount 除了可以接受一个新值直接更新 state 外，还可以通过函数的形式来更新，函数参数是 prevCount。`setCount(prevCount => prevCount + 1)`。
+- useState 更新 state 时总是会**替换旧的state**，而 setState 是合并新旧state。如果新旧的state是相等的，不会重新渲染组件。
+- useState 只会在页面第一次渲染时调用，后续的渲染不会再调用 useState。
 
-- 注意：useState 更新 state 时总是会替换旧的state，而 setState 是合并新旧state。
 
 ### useEffect
 
 - 使用：
   - 接受一个函数（称作effect）作为参数，在每次渲染后调用（包括页面第一次渲染和卸载，**调用时页面已经渲染完成了**）。相当于 `componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合。
   - 每次重新渲染，都会生成新的 effect 函数，所以能够在 effect 中获取最新的state值，并且在执行当前 effect 之前会对上一个 effect 进行清除。
-  - 可以接受一个数组作为第二个参数，当数组内的数据发生变化时，才会执行 effect 优化性能。即使只有一个数组元素发生变化也会执行 effect（如果收到一个空数组，则只在页面挂载和卸载时执行一次 effect）。
+  - 可以接受一个数组作为第二个参数，当数组内的数据发生变化时，才会执行 effect 优化性能。即使只有一个数组元素发生变化也会执行 effect（如果收到一个空数组，则只在页面挂载和卸载时执行一次 effect。不传第二个参数的话则每次渲染都会调用）。
   - effect 可以返回一个函数作为清除函数（在组件卸载前调用），用来清除订阅或定时器。这防止了当依据id订阅某个消息时，当id改变了而旧的订阅器一直存在造成的内存泄漏问题（或者省去了在 componentDidUpdate 手动更新订阅器的操作）。
   - 可以使用多个 useEffect，从而分离不相关的代码。
 
@@ -30,6 +30,7 @@
     - 页面渲染。
     - effect。
   - 通常在 effect 内部声明它所需要的函数，这样就能容易的看出 effect 依赖了组件作用域中的哪些值。
+  - useLayoutEffect的函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新。
 
 - 问题：
   - 如何避免因 effect 的依赖频繁变化而造成频繁执行 effect：
@@ -80,7 +81,7 @@ function Counter() {
 
 ### useCallback
 
-- 返回一个 memoized 的函数。把回调函数及依赖项数组作为参数传入 useCallback，用来对函数进行缓存，防止总是重复的生成新的函数（避免因为生成新的函数而重新渲染组件）。返回的函数仅在某个依赖项改变时才会更新。
+- 返回一个 memoized 的函数（只是返回参数函数，并不会执行它）。把回调函数及依赖项数组作为参数传入 useCallback，用来对函数进行缓存，防止总是重复的生成新的函数（避免因为生成新的函数而重新渲染组件）。返回的函数仅在某个依赖项改变时才会更新。
 - 如果依赖项数组为空，则每次都返回旧的函数。（可使用 Set 来验证，将返回的函数放入 Set 中，观察 set.size）。
 
 
@@ -93,7 +94,7 @@ const memoizedCallback = useCallback(() => {
 
 ### useMemo
 
-- 返回一个 memoized 值。把“创建”函数和依赖项数组作为参数传入 useMemo，它仅会在某个依赖项改变时才重新计算 memoized 值。这可以避免无关依赖改变时也重新计算memoized值，导致每次渲染时都进行高开销的计算。如果依赖没有发生变化时，则不执行计算直接返回缓存结果。如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值。
+- 返回一个 memoized 值（会执行参数函数）。把“创建”函数和依赖项数组作为参数传入 useMemo，它仅会在某个依赖项改变时才重新计算 memoized 值。这可以避免无关依赖改变时也重新计算memoized值，导致每次渲染时都进行高开销的计算。如果依赖没有发生变化时，则不执行计算直接返回缓存结果。如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值。
 
 - 传入 useMemo 的函数会在渲染期间执行。所以不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 useEffect 的适用范畴，而不是 useMemo。
 
@@ -124,13 +125,20 @@ export default function WithMemo() {
 
 ### useRef
 
-useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数（initialValue）。返回的 ref 对象在组件的整个生命周期内保持不变，并且 useRef 会在每次渲染时返回同一个 ref 对象。
+#### 特点
+
+- 返回一个不变的 ref 对象（只有 current 属性），current 被初始化为传入的参数（current可后续手动改变），ref 对象在组件的整个生命周期内保持不变（也就是 useRef 在每次渲染时返回的都是同一个 ref 对象）。
+
+- 跟 useState 一样，返回的 ref 对象只会在页面第一次渲染时创建一次，后续页面的渲染不会再创建。
+
+#### 用途
+
+- 绑定 DOM 节点。跟 createRef 一样用来生成对DOM对象或组件的引用。
 
 ```js
 function TextInputWithFocusButton() {
   const inputEl = useRef(null);
   const onButtonClick = () => {
-    // `current` 指向已挂载到 DOM 上的文本输入元素
     inputEl.current.focus();
   };
   return (
@@ -142,7 +150,111 @@ function TextInputWithFocusButton() {
 }
 ```
 
+- 绑定数据。用来和某一个 state 关联起来，可用于解决 useEFfect 等 hook 中闭包过时的问题。注意这绑定是单方向的，关联的 state 改变了，绑定的 ref 对象的 current 也自动跟着变；但如果是改变 ref 对象的 current，则关联的 state 不会跟着变。
 
+```js
+const Demo = () => {
+  const [count,setCount] = useState(0);
+  const countRef = useRef();
+  countRef.current = count;
+  useEffect(() => {
+    const timeId = setInterval(() => {
+      setCount(countRef.current + 1);
+      console.log(countRef);
+    }, 1000);
+    console.log("id: ", timeId); // 因为依赖项数组为空，所以只会打印一次timerId，也就是定时器只创建了一次
+    return () => {
+      clearInterval(timeId);
+    }
+  }, [])
+
+  return (
+    <>
+      <p>countRef.current: {countRef.current}</p>
+      <p>count: {count}</p>
+    </>
+  )
+}
+```
+
+
+### useReducer
+
+- 相较于 useState，useReducer 更适合用在更新state时有比较复杂的逻辑（比如根据参数选择不同的更新方式，使用switch）或者更新操作依赖于当前的 state等场景。（感觉和使用函数形式更新的 useState 差不多）
+- useReducer 总共有三个参数：
+  - 第一个参数是 一个 reducer，其函数签名为 `(state, action) => newState`，传入当前的 state 和调用更新函数时传的参数。
+  - 第二个参数是初始 state，也就是默认值，是比较简单的方法。
+  - 第三个参数是惰性初始化，这么做可以将用于计算 state 的逻辑提取到 reducer 外部，这也为将来对重置 state 的 action 做处理提供了便利。
+
+```js
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, {
+    count: 0
+  });
+  return (
+    <>
+      点击次数: {state.count}
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+    </>
+  );
+}
+```
+
+
+### useImperativeHandle
+
+在使用 ref 时自定义暴露给父组件的实例值，也就是子组件可以选择性的暴露给副组件一些方法，这样可以隐藏一些私有方法和属性，官方建议，useImperativeHandle应当与 forwardRef 一起使用。
+
+```js
+function Kun (props, ref) {
+  const kun = useRef()
+  const introduce = useCallback (() => {
+    console.log('i can sing, jump, rap, play basketball')
+  }, []);
+  // 选择性暴露给父组件
+  useImperativeHandle(ref, () => ({
+    introduce: () => {
+      introduce()
+    }
+  }));
+
+  return (
+    <div ref={kun}> { props.count }</div>
+  )
+}
+
+const KunKun = forwardRef(Kun)  // 使用forwardRef转发ref
+
+function App () {
+  const [ count, setCount ] = useState(0)
+  const kunRef = useRef(null)
+  const onClick = useCallback (() => {
+    setCount(count => count + 1)
+    kunRef.current.introduce()
+  }, [])
+
+  return (
+    <div>
+      点击次数: { count }
+      <KunKun ref={kunRef}  count={count}></KunKun>
+      <button onClick={onClick}>点我</button>
+    </div>
+    )
+}
+
+```
 ### Hook中的闭包
 
 useEffect、useMemo、useCallback都是自带闭包的。每一次组件的渲染，它们都会捕获当前组件函数上下文中的状态(state, props)，所以每一次这三种hooks的执行，反映的也都是当前的状态，你无法使用它们来捕获上一次的状态。
@@ -166,8 +278,10 @@ const changeValue = useCallback(() => {
 - 只能在函数组件中使用，或者在自定义 Hook 中调用其他 Hook 。
 - 不要在循环，条件或嵌套函数中调用 Hook， 确保总是在你的 React 函数的最顶层调用他们。
   - 这是因为内部 state 和对应 Hook 的关联，是靠 Hook 的调用顺序在多次渲染之间保持一致的。如果在条件语句中调用 Hook，会导致Hook的调用顺序不一致（可将判断语句放在effect里判断是否执行）。
+  - 其实只要保证循环每次都完全一样还是可以在循环中使用 Hook 的。
 
 ## 自定义Hook
 
 - 规则：必须以 “use” 开头。
+- 自定义的 Hook 就是为了将组件逻辑提取到可重用的函数中，来解决逻辑难以复用的问题。
 - 在两个组件中使用相同的 Hook，每次调用时都会创建一个新的state，两个 state 是独立互不关联的。
