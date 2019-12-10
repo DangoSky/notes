@@ -25,6 +25,7 @@ module.exports = {
           '/JavaScript/模块化.md',
           '/JavaScript/Storage.md',
           '/JavaScript/疑难杂症.md',
+          '/JavaScript/OAuth.md',
         ]
       }, {
         title: 'CSS',
@@ -87,6 +88,7 @@ module.exports = {
       }, {
         title: 'Mobx',
         children: [
+          '/Mobx/observable.md',
           '/Mobx/踩坑指南.md',
         ]
       }, {
@@ -104,6 +106,9 @@ module.exports = {
       }, {
         title: '计算机网络',
         children: [
+          '/计算机网络/概述.md',
+          '/计算机网络/物理层.md',
+          '/计算机网络/数据链路层.md',
           '/计算机网络/状态码.md',
           '/计算机网络/报文.md',
           '/计算机网络/get和post.md',
