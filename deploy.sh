@@ -16,7 +16,6 @@ yarn build
 cd docs/.vuepress/dist
 
 # 如果是发布到自定义域名
-# echo 'www.example.com' > CNAME
 echo 'notes.dangosky.com' > CNAME
 
 git init
