@@ -26,6 +26,7 @@ module.exports = {
           '/JavaScript/Storage.md',
           '/JavaScript/疑难杂症.md',
           '/JavaScript/OAuth.md',
+          '/JavaScript/cookie和session.md',
         ]
       }, {
         title: 'CSS',
@@ -88,7 +89,10 @@ module.exports = {
       }, {
         title: 'Mobx',
         children: [
+          '/Mobx/概述.md',
           '/Mobx/observable.md',
+          '/Mobx/action.md',
+          '/Mobx/autorun.md',
           '/Mobx/踩坑指南.md',
         ]
       }, {
