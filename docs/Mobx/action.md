@@ -1,7 +1,36 @@
 # action
 
-- 对数据的修改是同步的。
+- 对数据的修改是同步的。为了不让每次修改数据就更新一遍，可以使用 transaction 来批量更新（但还是同步的）。
 
+```js
+transaction(() => {
+  user.firstName = "foo";
+  user.lastName = "bar";
+});
+```
+
+- 运行时的依赖检测：
+
+```js
+const counter = observable(0);
+const foo = observable(0);
+const bar = observable(0);
+
+autorun(() => {
+  if (counter.get() === 0) {
+    console.log('foo', foo.get());
+  } else {
+    console.log('bar', bar.get());
+  }
+});
+
+bar.set(10);    // 不触发 autorun
+counter.set(1); // 触发 autorun
+foo.set(100);   // 不触发 autorun
+bar.set(100);   // 触发 autorun
+
+// autorun 先是依赖 counter 和 foo，然后 counter 设为 1 之后，就不依赖 foo，而是依赖 counter 和 bar 了。
+```
 
 ## action 中的异步操作
 
