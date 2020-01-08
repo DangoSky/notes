@@ -25,6 +25,7 @@ module.exports = {
           '/JavaScript/模块化.md',
           '/JavaScript/Storage.md',
           '/JavaScript/疑难杂症.md',
+          '/JavaScript/WebSocket.md',
           '/JavaScript/OAuth.md',
           '/JavaScript/cookie和session.md',
         ]
