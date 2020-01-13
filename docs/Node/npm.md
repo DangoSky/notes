@@ -2,6 +2,10 @@
 
 ## npm 命令
 
+### npm run
+
+查看项目中可以运行的 npm 命令。
+
 ### npm init
 
 npm init 用来初始化生成一个新的package.json文件。可以使用-f（代表force）、-y（代表yes）来跳过提问阶段，直接生成一个新的package.json文件。`npm init -y`。

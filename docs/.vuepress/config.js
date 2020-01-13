@@ -21,7 +21,6 @@ module.exports = {
           '/JavaScript/Iterator和Generator.md',
           '/JavaScript/async.md',
           '/JavaScript/网络.md',
-          '/JavaScript/通信.md',
           '/JavaScript/模块化.md',
           '/JavaScript/Storage.md',
           '/JavaScript/疑难杂症.md',
@@ -117,7 +116,6 @@ module.exports = {
           '/计算机网络/网络层.md',
           '/计算机网络/运输层.md',
           '/计算机网络/应用层.md',
-          '/计算机网络/代理.md',
         ]
       }, {
         title: '操作系统',
