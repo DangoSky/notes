@@ -34,23 +34,42 @@ f().then(v => console.log(v))
 
 
 ## 原理
+
 async 函数的实现原理，就是将 Generator 函数和自动执行器，包装在一个函数里。
 
 ```js
-async function fn(args) {
-  // ...
-}
-// 等同于
-function fn(args) {
-  return spawn(function* () {
-    // ...
+function spawn(genF) {
+  // async 返回值是一个 Promise
+  return new Promise(function(resolve, reject) {
+    // genF 是一个 generator 函数，先生成一个迭代器
+    var gen = genF();
+    function step(nextF) {
+      try {
+        var next = nextF();
+      } catch(e) {
+        return reject(e); 
+      }
+      // 若 generator 执行完毕了的话，就直接以最终值 resolve 掉结束
+      if(next.done) {
+        return resolve(next.value);
+      } 
+      // 若 generator 还没结束，则将当前的值转化为 Promise 并通过链式调用继续执行下去直至完成
+      Promise.resolve(next.value).then(function(v) {
+        step(function() { return gen.next(v); });      
+      }, function(e) {
+        step(function() { return gen.throw(e); });
+      });
+    }
+    step(function() { return gen.next(undefined); });
   });
 }
 ```
 
 ## 串行和并行
 
-多个 await 命令后面的异步操作，如果不存在依赖关系，最好让它们同时触发。
+- async 的一个缺点是：因为 await 将异步代码改造成了同步代码，所以如果多个异步代码没有依赖性却使用了 await 会导致性能上的降低。因此使用时需要特别注意 await 的使用方法才行。
+
+- 多个 await 命令后面的异步操作，如果不存在依赖关系，最好让它们同时触发。
 
 ```js
 // 写法一
