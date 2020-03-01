@@ -124,3 +124,5 @@ sayHello.call(B); // A
 ### 显式绑定
 
 ### new 绑定
+
+#### 优先级：new > call、apply、bind > 对象.方法 > 直接调用。
