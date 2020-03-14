@@ -23,6 +23,8 @@ module.exports = {
           '/JavaScript/网络.md',
           '/JavaScript/模块化.md',
           '/JavaScript/Storage.md',
+          '/JavaScript/设计模式.md',
+          '/JavaScript/内存管理.md',
           '/JavaScript/疑难杂症.md',
           '/JavaScript/WebSocket.md',
           '/JavaScript/OAuth.md',

@@ -32,11 +32,13 @@ style.left（style.top）和 offsetLeft（offsetTop）都能获取到目标元�
 
 - scrollLeft（scrollTop） = 滚动的长度。
 
-- scrollWidth（scrollHeight）= content + padding + 被卷去的部分（不包括margin和border）。（判断是否滚动到底部，scrollHeight <= clientHeight + scrollTop）
+- scrollWidth（scrollHeight）= content + padding + 被卷去的部分（不包括margin和border）。
+
+- 判断元素是否滚动到底部：`element.scrollHeight - element.scrollTop === element.clientHeight`
 
 兼容写法：
-window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+`window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0`;
+`window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;`
 
 ## 获取浏览器窗口大小
 
