@@ -86,7 +86,7 @@ setTimeout(() => { console.log(123) }, 2000);
 // 上面代码中，someAsyncThing 函数产生的 Promise 对象，内部有语法错误。浏览器运行到这一行，会打印出错误提示，但是不会退出进程、终止脚本执行，2 秒之后还是会输出 123。这就是说，Promise 内部的错误不会影响到 Promise 外部的代码，通俗的说法就是 “Promise 会吃掉错误”。
 ```
 
-- Promise 对象后面要跟 catch 方法，这样可以处理 Promise 内部发生的错误（使用 catch 代替 reject）。catch 方法返回的还是一个 Promise 对象，因此后面还可以接着调用 then 方法。但如果后面的 then 方法出现错误，就不会前面的 catch 了。catch 方法之中，还能再抛出错误，用来捕获前一个 catch 方法抛出的错误。
+- Promise 对象后面要跟 catch 方法，这样可以处理 Promise 内部发生的错误（使用 catch 代替 reject）。catch 方法返回的还是一个 Promise 对象，因此后面还可以接着调用 then 方法。但如果后面的 then 方法出现错误，就不会触发前面的 catch 了。catch 方法之中，还能再抛出错误，用来捕获前一个 catch 方法抛出的错误（简单地说，就是 Promise 会错误冒泡，前面产生的错误会一直向后传递直到被 catch 接收到，这样就可以不用频繁地检查错误了）。
 
 
 ## 方法

@@ -1,11 +1,12 @@
 # async
 
-- async 函数的 await 命令后面，可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。
+## 特性
+
 - async 函数的返回值是 Promise 对象，可以用 then 方法指定下一步的操作。
 - async 函数内部 return 语句返回的值，会成为 then 方法回调函数的参数。
 - async 函数内部抛出错误，会导致返回的 Promise 对象变为 reject 状态。
 - async 函数返回的 Promise 对象，必须等到内部所有 await 命令后面的 Promise 对象执行完，才会发生状态改变，除非遇到 return 语句或者抛出错误。
-- 正常情况下，await 命令后面是一个 Promise 对象，返回该对象的结果。如果不是 Promise 对象，就直接返回对应的值。另一种情况是，await 命令后面是一个 thenable 对象（即定义 then 方法的对象），那么 await 会将其等同于 Promise 对象。
+- 正常情况下，await 命令后面是一个 Promise 对象，此时返回该对象的结果；如果是原始数据类型，则自动转成立即 resolved 的 Promise 对象；如果是一个 thenable 对象（即定义了 then 方法的对象），那么 await 会将其等同于 Promise 对象。
 - 任何一个 await 语句后面的 Promise 对象变为 reject 状态，那么整个 async 函数都会中断执行。如果我们希望即使前一个异步操作失败，也不要中断后面的异步操作。这时可以将第一个 await 放在 try...catch 结构里面，这样不管这个异步操作是否成功，第二个 await 都会执行。
 
 ```js
@@ -30,6 +31,24 @@ async function f() {
 f().then(v => console.log(v))
 // 出错了
 // hello world
+```
+
+```js
+async function test() {
+  console.log(100)
+  let x = await 200
+  console.log(x)
+  console.log(200)
+}
+console.log(0)
+test()
+console.log(300)
+
+// 0
+// 100
+// 300
+// 200
+// 200
 ```
 
 
@@ -104,4 +123,123 @@ async function logInOrder(urls) {
   }
 }
 // 虽然 map 方法的参数是 async 函数，但它是并发执行的，因为只有 async 函数内部是继发执行，外部不受影响。后面的 for..of 循环内部使用了 await，因此实现了按顺序输出。
+```
+
+
+## forEach 中的 await
+
+- 问题：对于异步代码，forEach 并不能保证按顺序执行。
+
+```js
+async function test() {
+  let arr = [4, 2, 1]
+  arr.forEach(async item => {
+    const res = await handle(item)
+    console.log(res)
+  })
+  console.log('结束')
+}
+
+function handle(x) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(x)
+    }, 1000 * x)
+  })
+}
+
+test()
+
+// 实际输出结果
+// 结束
+// 1
+// 2
+// 4
+```
+
+- 原因：forEach 底层实现中，是把 forEach 的回调函数直接拿来并行执行的，这就导致了它无法保证异步任务的执行顺序。比如后面的异步任务用时短，那么就可能抢在前面的任务之前执行。在上述例子中我们使用的 async/await 只是用于 callback 内部等待异步任务，而 forEach 本身这个循环是没有使用 async/await的。（具体 polyfill 可参考 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)）
+
+```js
+for (var i = 0; i < length; i++) {
+  if (i in array) {
+    var element = array[i];
+    callback(element, i, array);  // 所以在 callback 中使用 break 和 return 也不能正常退出
+  }
+}
+```
+
+所以上述的例子其实就变成了这样。
+
+```js
+async function test() {
+  let arr = [4, 2, 1]
+  for (let i=0; i<arr.length; i++) {
+    (async val => {
+      const res = await handle(val)
+      console.log(res)
+    })(val)
+  }
+  console.log('结束')
+}
+```
+
+#### 解决方案：
+
+- 使用 for...of。
+
+```js
+async function test() {
+  let arr = [4, 2, 1]
+  // 只需把 forEach 改为 for...of
+  for(item of arr) {
+    const res = await handle(item)
+    console.log(res)
+  }
+  console.log('结束')
+}
+```
+
+for..of 内部使用了迭代器去遍历，而不像 forEach 一样直接调用回调函数。
+
+```js
+async function test() {
+  let arr = [3, 2, 1];
+  const iterator = arr[Symbol.iterator]();
+  let res = iterator.next()
+  while (!res.done) {
+    const value = res.value;
+    await handle(value);
+    res = iterator.next();
+  }
+}
+```
+
+- 改造下 forEach，使回调函数内部执行的时候使用 async（其实也就是直接使用 for 循环了）。
+
+```js
+async function test() {
+  let arr = [4, 2, 1]
+  asyncForEach(arr, async function(val) {
+    const res = await handle(val)
+    console.log(res)
+  })
+  console.log('结束')
+}
+
+async function asyncForEach(arr, callback) {
+  for (let i=0; i<arr.length; i++) {
+    // 循环时使用 await
+    await callback(arr[i], i, arr)
+  }
+}
+
+function handle(x) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(x)
+    }, 1000 * x)
+  })
+}
+
+test()
 ```
