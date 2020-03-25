@@ -1,5 +1,7 @@
 # async
 
+> 简易模拟实现 async，可参考 [Blog](http://blog.dangosky.com/2019/03/28/JS%E4%B9%8B%E6%A8%A1%E6%8B%9F%E5%AE%9E%E7%8E%B0/#toc-heading-26)
+
 ## 特性
 
 - async 函数的返回值是 Promise 对象，可以用 then 方法指定下一步的操作。
