@@ -2,11 +2,36 @@
 
 ## Cookie
 
-- HTTP 是无状态的协议。对于事务处理没有记忆能力，每次客户端和服务端会话完成时，服务端不会保存任何会话信息。可以通过 Cookie 或者 Session 来保存两者通信的状态。
+> 参考 [HTTP cookies](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies)。
 
-- 存储在客户端。在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上。
+- HTTP 是无状态的协议。对于事务处理没有记忆能力，每次客户端和服务端会话完成时，服务端不会保存任何会话信息。可以通过 Cookie 或者 Session 来保存两者通信的状态。Cookie 存储在客户端，在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上。
 
-- 可以通过 domain 和 path 来限制 Cookie 使用的域名和路径范围。（二级域名可以使用一级域名下的 Cookie）
+- Cookie 的过期时间是相对于客户端时间而言的，设置的时间则是相对于服务器时间而言的，这里有两个问题：
+
+Q：如果服务器在海外，和国内的客户端相差了好几个小时，那么可能海外服务器下发 Cookie 到国内客户端的时候，因为时差 Cookie 就已经失效了。
+
+A：服务器下发 Cookie 的时候会指明时区。
+
+Q：客户端可以修改 Cookie 的有效期，让 Cookie 永久有效。
+
+A：请求时将 Cookie 发送到服务器，服务器会将这个 Cookie 的信息和服务器上对应的这个 Cookie 信息（也可以存在数据库里）做对比，有效的话才会验证通过。
+
+- 可以通过 Domain 和 Path 来限制 Cookie 使用的域名和路径范围。Domain 的默认值为设置该 Cookie 的网页所在域名，Path 默认值为设置该 Cookie 的网页所在的目录。需要注意的是二级域名可以使用一级域名下的 Cookie。但如果是跨域请求，即使 Domain 和 Path 都满足，Cookie 也不会被添加到请求中。
+
+- Secure 属性：设置为 true 的话表示该 Cookie 只能在 https 中使用。需要注意的是通过 JavaScript 修改 Secure 属性时，必须保证网页是 https 协议的，在 http 协议的网页中是无法设置 Secure 类型的 Cookie的。
+
+- HttpOnly 属性：设置为 true 的话表示该 Cookie 只能在服务端访问，不能被 JavaScript 访问到。
+
+- Expires/Max-age 属性：表示 Cookie 的有效时间。
+    - Expires 是一个时间点表示 Cookie 失效的时刻，必须是 GMT 格式的时间，可以通过 `new Date().toGMTString()` 装换。默认值为 Session，表示有效期是到浏览器关闭的时候。
+    - Max-age 的值是一个以秒为单位的时间段，表示从现在开始多少秒后 Cookie 失效。Max-age 有三种可能值：负数、0、正数。负数表示会话级 Cookie（默认值 -1）；0 表示删除 Cookie；正数表示有效期为创建时刻加上该 Max-age 值。
+
+- 设置 Cookie：
+    - 服务端通过响应头中的 `Set-cookie` 字段设置。
+    - 客户端设置：
+        - `document.cookie = "${name}=${value}; expires=Thu, 26 Feb 2116 11:50:25 GMT; domain=${domain}"`
+    - 注意如果在客户端修改 Cookie，新旧 Cookie 的 Domain 和 Path 属性需要保持一致，否则就成了设置新的 Cookie 了。
+    - 最好对 Cookie 的键值使用 escape 和 unescape 进行编码解码，防止中间包含逗号、分号、空格而被当做特殊字符。
 
 
 ## Session 
@@ -138,3 +163,7 @@ JWT 的原理是，服务器认证以后，生成一个 JSON 对象（记录用�
   - SSO 认证中心引导用户至登录页面。
 
 ![](./images/6.png)
+
+36 6 3
+1：6次 淘汰18  剩下18
+2：3次 
