@@ -15,7 +15,7 @@
 
 - Promise 构造函数接受一个回调函数作为参数，回调函数里面是异步操作的代码。 如果调用 resolve 函数和 reject 函数时带有参数，那么它们的参数会被传递给回调函数。reject 函数的参数通常是 Error 对象的实例，表示抛出的错误；resolve 函数的参数除了正常的值以外，还可能是另一个 Promise 实例。
 
-  - resolve 函数的作用是，将 Promise 实例的状态从 “未完成” 变为“成功”（即从 pending 变为 fulfilled），在异步操作成功时调用，并将异步操作的结果，作为参数传递出去。resolve(..) 既可能完成 promise，也可能拒绝，要根据传入参数而定。如果传给 resolve(..) 的是一个非 Promise、非 thenable 的立即值，这 个 promise 就会用这个值完成。但是，如果传给 resolve(..) 的是一个真正的 Promise 或 thenable 值，这个值就会被递归展 开，并且(要构造的)promise 将取用其最终决议值或状态。
+  - resolve 函数的作用是，将 Promise 实例的状态从 “未完成” 变为“成功”（即从 pending 变为 fulfilled），在异步操作成功时调用，并将异步操作的结果，作为参数传递出去。resolve(..) 既可能完成 promise，也可能拒绝，要根据传入参数而定。如果传给 resolve(..) 的是一个非 Promise、非 thenable 的立即值，这 个 promise 就会用这个值完成。但是，如果传给 resolve(..) 的是一个真正的 Promise 或 thenable 值，这个值就会被递归展 开，并且 promise 将取用其最终决议值或状态。
   - reject 函数的作用是，将 Promise 实例的状态从 “未完成” 变为“失败”（即从 pending 变为 rejected），在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去。
   - 如果完成或拒绝回调中抛出异常，返回的 promise 是被拒绝的。
 
@@ -39,7 +39,7 @@ const p2 = new Promise(function (resolve, reject) {
 })
 ```
 
-- Promise 新建后立即执行，then 方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行。并且调用 resolve 或 reject 并不会终结 Promise 的参数函数的执行。
+- Promise 新建后立即执行，then 方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行（微任务）。并且调用 resolve 或 reject 并不会终结 Promise 的参数函数的执行。
 ```js
 new Promise((resolve, reject) => {
   resolve(1);
@@ -110,7 +110,7 @@ p1
 
 ### Promise.prototype.catch
 
-如果异步操作抛出错误，状态就会变为 rejected，就会调用 catch 方法指定的回调函数处理这个错误。另外，then 方法指定的回调函数，如果运行中抛出错误，也会被 catch 方法捕获。Promise.prototype.catch 方法是. then(null, rejection) 的别名，用于指定发生错误时的回调函数。
+如果异步操作抛出错误，状态就会变为 rejected，就会调用 catch 方法指定的回调函数处理这个错误。另外，then 方法指定的回调函数，如果运行中抛出错误，也会被 catch 方法捕获。Promise.prototype.catch 方法是 Promise.prototype.then(null, reject) 的别名，用于指定发生错误时的回调函数。
 
 ```js
 p.then((val) => console.log('fulfilled:', val))
@@ -127,11 +127,11 @@ finally 方法用于指定不管 Promise 对象最后状态如何都会执行的
 ### Promise.all([p1, p2, p3])
 
  用于将多个 Promise 实例，包装成一个新的 Promise 实例。接受一个数组作为参数，p1、p2、p3 都是 Promise 实例，如果不是就会先调用 Promise.resolve 方法，将参数转为 Promise 实例再进一步处理。（Promise.all 方法的参数可以不是数组，但必须具有 Iterator 接口，且返回的每个成员都是 Promise 实例。）
-  - 只有 p1、p2、p3 的状态都变成 fulfilled，p 的状态才会变成 fulfilled，此时 p1、p2、p3 的返回值组成一个数组传递给 p 的回调函数。
-  - 只要 p1、p2、p3 之中有一个被 rejected，p 的状态就变成 rejected，此时第一个被 reject 的实例的返回值，会传递给 p 的回调函数。
-  - 返回给 then 的信息，是一个由所有传入 promise 的完成消息组成的数组，与指定的顺序一致 (与完成顺序无关)。
-  - 如果作为参数的 Promise 实例，自己定义了 catch 方法，那么它一旦被 rejected，并不会触发 Promise.all() 的 catch 方法。
-  - 若向 Promise.all([..]) 传入空数组，它会立即完成.
+
+- 只有 p1、p2、p3 的状态都变成 fulfilled，p 的状态才会变成 fulfilled，此时 p1、p2、p3 的返回值组成一个数组（按照原先 p1、p2、p3 的顺序）传递给 p 的回调函数。
+- 只要 p1、p2、p3 之中有一个被 rejected，p 的状态就变成 rejected，此时第一个被 reject 的实例的返回值，会传递给 p 的回调函数。
+- 如果作为参数的 Promise 实例，自己定义了 catch 方法，那么它一旦被 rejected，并不会触发 Promise.all() 的 catch 方法。
+- 若向 Promise.all([]) 传入空数组，它会立即完成.
 
 ```js
 const p1 = new Promise((resolve, reject) => {
@@ -146,7 +146,8 @@ const p2 = new Promise((resolve, reject) => {
 
 Promise.all([p1, p2]).then(result => console.log(result)).catch(e => console.log(e));
 // ["hello", Error: 报错了]
-// 上面代码中，p1 会 resolved，p2 首先会 rejected，但是 p2 有自己的 catch 方法，该方法返回的是一个新的 Promise 实例，p2 指向的实际上是这个实例。该实例执行完 catch 方法后，也会变成 resolved，导致 Promise.all() 方法参数里面的两个实例都会 resolved，因此会调用 then 方法指定的回调函数，而不会调用 catch 方法指定的回调函数。
+// 上面代码中，p1 会 resolved，p2 首先会 rejected，但是 p2 有自己的 catch 方法，该方法返回的是一个新的 Promise 实例，p2 指向的实际上是这个实例。
+// 该实例执行完 catch 方法后，也会变成 resolved，导致 Promise.all() 方法参数里面的两个实例都会 resolved，因此会调用 then 方法指定的回调函数，而不会调用 catch 方法指定的回调函数。
 // 如果 p2 没有自己的 catch 方法，就会调用 Promise.all() 的 catch 方法。
 ```
 
@@ -165,7 +166,7 @@ Promise.all([p1, p2]).then(result => console.log(result)).catch(e => console.log
 
 ### Promise.race([p1, p2, p3])
 
-只要 p1、p2、p3 之中有一个实例率先改变状态（不管是 resolve 还是 reject），p 的状态就跟着改变。那个率先改变的 Promise 实例的返回值，就传递给 p 的回调函数。Promise.race 方法的参数与 Promise.all 方法一样，如果不是 Promise 实例，就会先调用 Promise.resolve 方法，将参数转为 Promise 实例，再进一步处理。Promise. race([..]) 会挂住，且永远不会决议。
+只要 p1、p2、p3 之中有一个实例率先改变状态（不管是 resolve 还是 reject），p 的状态就跟着改变。那个率先改变的 Promise 实例的返回值，就传递给 p 的回调函数。Promise.race 方法的参数与 Promise.all 方法一样，如果不是 Promise 实例，就会先调用 Promise.resolve 方法，将参数转为 Promise 实例，再进一步处理。Promise.race([]) 会挂起，且永远不会决议。
 
 ```js
 // 下面是一个例子，如果指定时间内没有获得结果，就将 Promise 的状态变为 reject，否则变为 resolve。
@@ -204,7 +205,7 @@ Promise.reject(thenable).catch(e => {
 ## Promise 的缺点
 
   - 无法取消 Promise，一旦新建它就会立即执行，无法中途取消。
-    - 如果要取消一个 Promise，可以通过抛出一个错误来变相地取消 Promise。原理是这个错误会向后传递直至被捕获，中途的函数不会被调用到。但如果中途就捕获了错误，后续的函数还是会被执行到（可以 throw 一个特殊的 Error 对象，中途如果有 catch 捕获到了，就判断该错误的类型，是该特殊类型的话就一直往后 throw 错误直至最后，这样可以避免错误被中途捕获到）。
+    - 如果要取消一个 Promise，可以通过抛出一个错误来变相地取消 Promise。原理是这个错误会向后传递直至被捕获，中途的函数不会被调用到。但如果中途就捕获了错误，后续的函数还是会被执行到（因为 catch 方法会返回一个 Promise）。可以 throw 一个特殊的 Error 对象，中途如果有 catch 捕获到了，就判断该错误的类型，是该特殊类型的话就一直往后 throw 错误直至最后，这样可以避免错误被中途捕获到。
     - 返回一个一直处于 pedding 的 Promise（不要去 resolve 或 reject 它即可），因为新 Promise 一直没有被决断，所以后面的代码也就不会被执行到，相当于取消了 Promise（但可能会造成内存泄漏，因为后续函数一直没有被调用到，它们的引用一直保存着得不到释放）。
   - 当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
   - 如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部。
