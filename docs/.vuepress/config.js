@@ -29,6 +29,8 @@ module.exports = {
           '/JavaScript/WebSocket.md',
           '/JavaScript/OAuth.md',
           '/JavaScript/cookie和session.md',
+          '/JavaScript/网页性能.md',
+          '/JavaScript/小程序.md',
         ]
       }, {
         title: 'CSS',

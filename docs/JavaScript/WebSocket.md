@@ -8,10 +8,9 @@
   - 基于 TCP 协议
   - 协议标识符是 ws（如果加密，则为 wss），服务器网址就是 URL。
 
-- 客户端请求连接的报文
-
+- 客户端请求连接报文的主要字段
   - Upgrade：websocket：表明这是 WebSocket 类型请求.
-  - Sec-WebSocket-Key：WebSocket 客户端发送的一个 base64 编码的密文，要求服务端必须返回一个对应加密的 Sec-WebSocket-Accept 应答，否则客户端会抛出 Error during WebSocket handshake 错误，并关闭连接。
+  - Sec-WebSocket-Key：WebSocket 客户端发送的一个 base64 编码的随机数，服务端需要在这个请求头的尾部追加其他的密文，并进行 SHA-1 加密后返回给客户端。否则客户端会抛出 Error during WebSocket handshake 错误，并关闭连接。
 
 ```js
 GET /webfin/websocket/ HTTP/1.1
