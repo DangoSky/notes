@@ -14,7 +14,7 @@ module.exports = {
       {
         title: 'JavaScript',
         children: [
-          '/JavaScript/基本.md',
+          '/JavaScript/其他.md',
           '/JavaScript/DOM属性计算.md',
           '/JavaScript/this.md',
           '/JavaScript/Promise.md',
@@ -120,11 +120,11 @@ module.exports = {
         title: '计算机网络',
         children: [
           '/计算机网络/概述.md',
-          '/计算机网络/物理层.md',
-          '/计算机网络/数据链路层.md',
-          '/计算机网络/网络层.md',
-          '/计算机网络/运输层.md',
           '/计算机网络/应用层.md',
+          '/计算机网络/运输层.md',
+          '/计算机网络/网络层.md',
+          '/计算机网络/数据链路层.md',
+          '/计算机网络/物理层.md',
         ]
       }, {
         title: '操作系统',

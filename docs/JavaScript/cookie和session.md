@@ -20,11 +20,11 @@ HTTP 是无状态的协议。对于事务处理没有记忆能力，每次客户
   - Expires 是一个时间点表示 Cookie 失效的时刻，必须是 GMT 格式的时间，可以通过 `new Date().toGMTString()` 装换。默认值为 Session，表示有效期是到浏览器关闭的时候。
   - Max-age 的值是一个以秒为单位的时间段，表示从现在开始多少秒后 Cookie 失效。Max-age 有三种可能值：负数、0、正数。负数表示会话级 Cookie（默认值是 -1）；0 表示立即删除 Cookie；正数表示有效期为创建时刻加上该 Max-age 值。
 
-- SameSite：让 Cookie 在跨站请求时不会被发送，从而可以阻止跨站请求伪造攻击 CSRF。以此可以用来限制第三方 Cookie，从而减少安全风险。之前默认值是 None，Chrome80 后默认是 Lax。它可以设置以下三个值：
-  - （先解释下什么叫做第三方 Cookie，比如我在银行网站登录后收到了服务器发来的 Cookie，之后我又访问了一个钓鱼网站并点击了一个钓鱼按钮，它会向银行服务器发起一个转账的请求，因为此时还拥有银行网站的 Cookie，所以该操作会被验证通过。这种第三方网站引导发出的 Cookie，就称为第三方 Cookie。）
-  - Strict：完全禁止第三方 Cookie。跨站点时任何情况下都不会发送 Cookie。只有当前网页的 URL 与请求目标一致，才会带上 Cookie。比如我在掘金有一个跳转到 Github 的链接，但因为当前的 URL 和请求目标不一致所以不会点击跳转是不会带 Github 的 Cookie 的。
+- SameSite：控制在跨站请求时是否要发送 Cookie，可以用来防止 CSRF 攻击。之前默认值是 None，Chrome80 后默认是 Lax。它可以设置以下三个值：
+  - Strict：跨站点时任何情况下都不会发送 Cookie。只有当前网页的 URL 与请求目标一致，才会带上 Cookie。比如访问 google.com，只有在 google.com 域名下的的请求才会携带上 Cookie。
   - Lax：只有导航到目标网址的 Get 请求才允许发送 Cookie，其他的一律禁止。比如 a 链接、link 加载静态资源、GET 表单请求等。而 POST 请求、AJAX 请求、img 链接、iframe 链接等则禁止带上 Cookie。
-  - None：设置为 None 可以关闭 SameSite 属性，，但同时要设置 Secure 属性，否则无效。
+  - None：关闭 SameSite 属性，但同时要设置 Secure 属性，否则无效。
+  - （Samesite Cookie 目前有一个致命的缺陷：不支持子域。例如在 topic.a.com 下的 Cookie，并不能使用 a.com 下的 Samesite Cookie。
 
 
 #### Cookie 有效时间 FAQ
