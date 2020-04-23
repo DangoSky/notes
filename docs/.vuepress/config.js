@@ -110,6 +110,7 @@ module.exports = {
         children: [
           '/Webpack/入门.md',
           '/Webpack/F&Q.md',
+          '/Webpack/Babel.md',
         ]
       }, {
         title: 'Linux',
