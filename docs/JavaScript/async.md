@@ -10,6 +10,7 @@
 - async 函数返回的 Promise 对象，必须等到内部所有 await 命令后面的 Promise 对象执行完，才会发生状态改变，除非遇到 return 语句或者抛出错误。
 - 正常情况下，await 命令后面是一个 Promise 对象，此时返回该对象的结果；如果是原始数据类型，则自动转成立即 resolved 的 Promise 对象；如果是一个 thenable 对象（即定义了 then 方法的对象），那么 await 会将其等同于 Promise 对象。
 - 任何一个 await 语句后面的 Promise 对象变为 reject 状态，那么整个 async 函数都会中断执行。如果我们希望即使前一个异步操作失败，也不要中断后面的异步操作。这时可以将第一个 await 放在 try...catch 结构里面，这样不管这个异步操作是否成功，第二个 await 都会执行。
+- await 后面的函数执行完毕时，await 会产生一个微任务（其实也就是 Promise.then）去执行 async 剩下的代码。所以并不是 await 有结果了就会马上执行 async 剩下的代码的，需要放到微任务里面去执行。
 
 ```js
 async function f() {

@@ -71,6 +71,7 @@ module.exports = {
           '/React/其他.md',
           '/React/Hook.md',
           '/React/虚拟DOM.md',
+          '/React/React-Fiber.md',
         ]
       }, {
         title: 'React-Route',

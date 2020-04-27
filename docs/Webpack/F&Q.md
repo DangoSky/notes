@@ -2,7 +2,7 @@
 
 ## 工作原理
 
-### 构建作用
+### 构建的作用
 
 - 构建工具就是将源代码转换成可执行的 JavaScript、CSS、HTML 代码，包括以下内容：
   - 代码转换：将 TypeScript 编译成 JavaScript、将 Less 等编译成 CSS 等。
@@ -53,3 +53,7 @@ plugin 针对的是 loader 结束后 webpack 打包的整个过程。在 webpack
 - `[chunkhash]`：根据不同的入口文件（也就是 entry）进行依赖文件解析并构建对应的代码块（chunk），它是基于每个代码块的内容计算而来。只有代码块中的某个文件内容发生变化了，chunkhash 才会改变，影响范围是这个 chunk 中的文件。
 
 - `[contenthash]`：根据单独的每个文件内容来生成 contenthash，只要文件内容不变，则 contenthash 不变。
+
+## tree-shaking 原理
+
+只有 ES6 模块才能使用 tree-shaking，对于 CommonJS 是无法使用 tree-shaking 的。这是因为 tree-shaking 是静态分析的，在编译阶段就去判断每个模块和代码的使用情况，对于没有使用到的部分再做删除操作。而 CommonJS 可以动态 require 一个模块（基于判断来选择是否 require），只有执行后才知道引用的什么模块。
