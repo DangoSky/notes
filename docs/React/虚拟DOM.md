@@ -1,5 +1,7 @@
 # 虚拟 DOM
 
+template/JSX -> Render Function -> Vnode（做 Diff）-> DOM
+
 ## 虚拟 DOM 的优势
 
 - 非绝对上的速度优势。diff 算法比对虚拟 DOM 中需要变更的部分节点并更新，而非更新整个视图。不过如果整个 DOM 都更新了的话，使用虚拟 DOM 不仅一样要绘制渲染整个视图，而且还要进行 diff 算法，就不一定会更快了。

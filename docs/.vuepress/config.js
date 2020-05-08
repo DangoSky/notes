@@ -59,6 +59,7 @@ module.exports = {
           '/Vue/数据绑定.md',
           '/Vue/Vue-Router.md',
           '/Vue/踩坑指南.md',
+          '/Vue/Vue3.md',
         ]
       }, {
         title: 'React',
