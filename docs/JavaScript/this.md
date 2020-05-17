@@ -126,3 +126,13 @@ sayHello.call(B); // A
 ### new 绑定
 
 #### 优先级：new > call、apply、bind > 对象.方法 > 直接调用。
+
+
+## 箭头函数
+
+- 箭头函数和普通函数的区别
+  - 箭头函数没有 this，它的 this 继承自外层函数。
+  - 箭头函数不能作为构造函数和 Generator 函数使用。
+  - 箭头函数无法使用 apply、call、bind 等绑定 this。
+  - 箭头函数没有原型属性。
+  - 箭头函数没有 arguments 对象。
