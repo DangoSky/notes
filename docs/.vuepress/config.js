@@ -92,6 +92,11 @@ module.exports = {
           '/Node/服务端渲染和客户端渲染.md',
         ]
       }, {
+        title: '数据库',
+        children: [
+          '/数据库/mysql的基本使用.md',
+        ]
+      }, {
         title: 'Mobx',
         children: [
           '/Mobx/概述.md',
