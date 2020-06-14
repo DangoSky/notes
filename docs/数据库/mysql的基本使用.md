@@ -1,8 +1,6 @@
 # MySQL 基本使用
 
-## 语法
-
-### 常用操作
+## 常用操作
 
 #### 连接 MySQL
 
@@ -60,7 +58,7 @@ ON a.runoob_author = b.runoob_author
 
 #### 左连接
 
-除了获取等值连接的数据外，还会获取所有左数据表的数据，即使在右数据表中没有和它匹配的对应数据。
+除了获取等值连接的数据外，还会获取所有左数据表的数据。如果右数据表没有和它匹配的对应数据项（即不等值），则该数据项仍会获取到，但对应字段值会为 null。
 
 ```sql
 SELECT a.runoob_id, a.runoob_author, b.runoob_count
@@ -79,7 +77,7 @@ ON a.runoob_author = b.runoob_author;
 ```
 
 
-### 子句
+## 子句
 
 #### where 子句
 
@@ -91,13 +89,17 @@ LIKE 通常与 % 一同使用，相当于查找包含某个子串的值。如下
 
 `SELECT field FROM table_name WHERE field LIKE '%com'`
 
+或者也可以使用正则表达式来指定匹配条件。
+
+`SELECT field FROM table_name WHERE field REGEXP 'com$'`
+
 #### ORDER BY 子句
 
 根据指定的字段按升序或降序排列好后再返回结果，默认是升序 ASC。
 
 `SELECT field1, field2 FROM table_name1, table_name2 ORDER BY field1 ASC [DESC]`
 
-### 操作符
+## 操作符
 
 #### union 操作符
 
@@ -108,3 +110,12 @@ SELECT expression1 FROM tables [WHERE conditions]
 UNION [ALL | DISTINCT]
 SELECT expression2 FROM tables [WHERE conditions]
 ```
+
+
+## Null
+
+1. 无法直接使用 = 或 !=  来查找 Null 值，需要使用 `IS NULL` 或 `IS NOT NULL`。
+
+2. `<=>` 表示比较的两个值都为 Null 或相等时返回 true。
+
+3. NULL 值与任何其它值的比较（即使是 NULL）永远返回 NULL，即 NULL = NULL 返回 NULL 。
