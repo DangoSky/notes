@@ -111,6 +111,18 @@ UNION [ALL | DISTINCT]
 SELECT expression2 FROM tables [WHERE conditions]
 ```
 
+#### alert 操作符
+
+用于修改数据表名或者修改数据表字段。
+
+- 删除列。`ALTER TABLE table_name DROP field`
+
+- 新增列。`ALTER TABLE table_name ADD field INT`
+
+- 修改字段类型。`ALTER TABLE table_name MODIFY field CHAR(10)`
+
+或 `ALTER TABLE table_name CHANGE field newFieldName INT`
+
 
 ## Null
 
