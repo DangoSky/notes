@@ -76,6 +76,8 @@ FROM runoob_tbl a RIGHT JOIN tcount_tbl b
 ON a.runoob_author = b.runoob_author;
 ```
 
+![](./images/1.png)
+
 
 ## 子句
 
@@ -83,7 +85,7 @@ ON a.runoob_author = b.runoob_author;
 
 - WHERE 子句的字符串比较默认是不区分大小写的，可以使用 **BINARY** 关键字来使其区分大小写。`SELECT * from table_name WHERE BINARY column_name='xxx'`
 
-#### like 子句
+#### like
 
 LIKE 通常与 % 一同使用，相当于查找包含某个子串的值。如下例相当于查找值中包含有 com 这个子串的 field 字段。
 
@@ -93,15 +95,26 @@ LIKE 通常与 % 一同使用，相当于查找包含某个子串的值。如下
 
 `SELECT field FROM table_name WHERE field REGEXP 'com$'`
 
-#### ORDER BY 子句
+#### ORDER BY
 
 根据指定的字段按升序或降序排列好后再返回结果，默认是升序 ASC。
 
 `SELECT field1, field2 FROM table_name1, table_name2 ORDER BY field1 ASC [DESC]`
 
+#### not in
+
+选择不再某个表里出现过的字段。
+
+```sql
+select Name from A 
+where Id not in (
+  select Id from B
+) ;
+```
+
 ## 操作符
 
-#### union 操作符
+#### union
 
 连接两个及以上的 SELECT 语句的结果组合到一个结果集合中。使用 DISTINCT 时会删除重复的数据（默认），使用 ALL 则会保留重复数据。
 
@@ -111,7 +124,13 @@ UNION [ALL | DISTINCT]
 SELECT expression2 FROM tables [WHERE conditions]
 ```
 
-#### alert 操作符
+#### distinct
+
+用于对选择出来的数据进行去重。
+
+`select distinct name from Person`
+
+#### alert
 
 用于修改数据表名或者修改数据表字段。
 
