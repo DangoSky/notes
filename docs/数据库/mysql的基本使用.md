@@ -2,20 +2,63 @@
 
 ## 常用操作
 
+#### 启动数据库
+
+在安装 MySQL 目录下 bin 文件夹里运行 `net stat mysq` 启动，对应的关闭命令是 `net stop mysql`。
+
 #### 连接 MySQL
 
-`mysql -h 主机名 -u 用户名 -p`
+`mysql -h 主机名 -P 端口号 -u 用户名 -p -D 数据库名`
 
 参数说明：
 
 - -h：指定客户端所要登录的 MySQL 主机名，登录本机 localhost 或 127.0.0.1 时该参数可以省略。
+- -P：表示要连接的端口号。
 - -u：登录的用户名。
-- -p：告诉服务器将会使用一个密码来登录，如果所要登录的用户名密码为空，可以忽略此选项。
+- -p：表示使用一个密码来登录，如果所要登录的用户名密码为空，可以忽略此选项。
+- -D：表示要登录进哪个数据库。
 
+也可以简化成 `mysql -u 用户名 -p`。
+
+#### 创建用户
+
+`create user 用户名@'主机' identified by '密码'`
+
+注意引号不能省略，如果只是访问本地数据库的话，主机则为 localhost。
+
+#### 查看所有用户列表
+
+使用 root 账号登录后，`select user, host from mysql.user`
+
+#### 授权
+
+`grant all privileges on 数据库名.* to '用户名'@'%'`
+
+参数说明：
+
+- all 代表所有权限，也可以具体写成增删改查等权限。
+
+- % 代表所有 IP 都能访问，也可以更改为某个 IP 才能访问。
+
+#### 创建数据库
+
+`CREATE DATABASE 数据库名`
+
+#### 查看所有的数据库
+
+`show databases`
+
+#### 使用指定的数据库
+
+`use 数据库名` 
 
 #### 创建表
 
 `CREATE TABLE table_name (column_name column_type)`
+
+#### 查看所有的数据表
+
+`show tables`
 
 #### 删除表
 
@@ -23,11 +66,11 @@
 
 #### 插入数据
 
-`INSERT INTO table_name ( field1, field2,...fieldN ) VALUES ( value1, value2,...valueN )`
+`INSERT INTO table_name (field1, field2,...fieldN) VALUES (value1, value2,...valueN)`
 
 #### 查询数据
 
-`SELECT column_name, column_name FROM table_name [WHERE Clause] [LIMIT N] [ OFFSET M]`
+`SELECT column_name, column_name FROM table_name [WHERE Clause] [LIMIT N] [OFFSET M]`
 
 参数说明：
 
@@ -43,6 +86,27 @@
 #### 删除数据
 
 `DELETE FROM table_name [WHERE Clause]`
+
+#### 所有数据表所有的列
+
+1. `show columns from 数据表名`
+
+2. `describe 数据表名`
+
+#### 增加列
+
+`alter table <表名> add column <列名> varchar(30)`
+
+#### 导入数据库
+
+`source sql文件路径`
+
+注意点：
+
+1. 要导入的 sql 文件路径不能用 `\`，得用 `/`。
+
+2. 导入过程如果报 `source  unknown command \\` 错误，可能是编码问题，解决方法是，在登录数据库时就指定编码为 utf-8，`mysql -u 用户名 -p --default-character-set=utf8`
+
 
 #### 内连接/等值连接
 
