@@ -64,6 +64,10 @@
 
 `DROP TABLE table_name`
 
+#### 修改表名
+
+`alter table 旧表名 rename to 新表名`
+
 #### 插入数据
 
 `INSERT INTO table_name (field1, field2,...fieldN) VALUES (value1, value2,...valueN)`
@@ -91,11 +95,16 @@
 
 1. `show columns from 数据表名`
 
-2. `describe 数据表名`
+2. `describe 数据表名` 或 `desc 数据表名`
 
 #### 增加列
 
 `alter table <表名> add column <列名> varchar(30)`
+
+#### 删除列
+
+`alter table 表名 drop column 列名`
+
 
 #### 导入数据库
 
