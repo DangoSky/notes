@@ -74,14 +74,14 @@
 
 #### 查询数据
 
-`SELECT column_name, column_name FROM table_name [WHERE Clause] [LIMIT N] [OFFSET M]`
+`SELECT * FROM table_name [WHERE Clause] [OFFSET M] [LIMIT N]`
 
 参数说明：
 
 - 使用 * 来代替列名，SELECT 语句会返回表的所有字段数据。
 - 使用 WHERE 语句来指定筛选条件。
-- 使用 LIMIT 属性来设定返回的记录数。
-- 使用 OFFSET 指定 SELECT 语句开始查询的数据偏移量，默认情况下偏移量为 0。
+- 使用 OFFSET 指定 SELECT 语句开始查询的数据偏移量，默认情况下偏移量为 0，通常用于列表分页查找。
+- 使用 LIMIT 指定返回的数据总量。如果只传了一个参数 `LIMIT n`，则相当于是 `LIMIT 0 n`。
 
 #### 修改数据
 
@@ -100,6 +100,10 @@
 #### 增加列
 
 `alter table <表名> add column <列名> varchar(30)`
+
+设置默认值:
+
+`alter table <表名> add column <列名> varchar(30) not null default ''`
 
 #### 删除列
 
