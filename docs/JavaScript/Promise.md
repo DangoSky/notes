@@ -202,6 +202,103 @@ Promise.reject(thenable).catch(e => {
 // Promise.reject 方法的参数是一个 thenable 对象，执行以后，后面 catch 方法的参数不是 reject 抛出的 “出错了” 这个字符串，而是 thenable 对象。
 ```
 
+## 并行发起 limit 个请求
+
+如下，有以下 8 个图片链接，要并行发起 limit 个请求去加载图片，也就是说同时最多只能有 limit 个请求在进行。
+
+```js
+const urls = [
+  'https://www.kkkk1000.com/images/getImgData/getImgDatadata.jpg',
+  'https://www.kkkk1000.com/images/getImgData/gray.gif',
+  'https://www.kkkk1000.com/images/getImgData/Particle.gif',
+  'https://www.kkkk1000.com/images/getImgData/arithmetic.png',
+  'https://www.kkkk1000.com/images/getImgData/arithmetic2.gif',
+  'https://www.kkkk1000.com/images/getImgData/getImgDataError.jpg',
+  'https://www.kkkk1000.com/images/getImgData/arithmetic.gif',
+  'https://www.kkkk1000.com/images/wxQrCode2.png'
+];
+
+// 发起请求
+function loadImg(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onerror = reject;
+    img.src = url;
+    img.onload = function () {
+      resolve(img);
+    }
+  })
+};
+```
+
+#### 方法一
+
+```js
+const limit = 3;
+const willFetchUrls = urls.slice(); // 为了不影响到原始数据，先复制一份出来
+let fetchingCount = 0; // 正在进行的请求数量
+
+// 刚开始先并行发起 limit 个请求
+for(let i=0; i<limit; i++) {
+  fetch();
+}
+
+// 每当 new 一个 promise 时，该次请求就发起了
+// 所以在每一个请求完成时再去 new 一个新的 promise 发起请求即可
+function fetch() {
+  if (willFetchUrls.length && fetchingCount < limit) {
+    fetchingCount++;
+    loadImg(willFetchUrls.shift()).then((data) => {
+      // 每一个请求完成时，就递归发起下一个请求
+      fetchingCount--;
+      console.log(data);
+      fetch();
+    })
+  }
+}
+```
+
+
+#### 方法二
+
+```js
+const limit = 3;
+const willFetchUrls = urls.slice();
+
+fetch(limit);
+
+// 使用 promise.race(promises) 并行发起 limit 个请求
+// 每当一个请求完成时就再初始化一个请求替换掉 promises 中该已经完成的请求，之后再重新发起 promise.race
+function fetch(limit) {
+  function recur(promises) {
+    const p = Promise.race(promises);
+    p.then(index => {
+      if (willFetchUrls.length === 0) {
+        return;
+      }
+      // 替换掉已经完成的 promise
+      promises[index] = loadImg(willFetchUrls.shift());
+      promises[index].then(data => {
+        console.log(data);
+        recur(promises);
+        return index;
+      })
+    })
+  }
+
+  // 刚开始先并行发起 limit 个请求
+  const promises = willFetchUrls.splice(0, limit).map((url, index) => {
+    return loadImg(url).then(data => {
+      console.log(data);
+      // 请求完成时返回它在这个并行 promises 中的索引，
+      return index;
+    })
+  })
+
+  recur(promises);
+}
+```
+
 ## Promise 的缺点
 
   - 无法取消 Promise，一旦新建它就会立即执行，无法中途取消。
