@@ -50,3 +50,51 @@ npm install默认会安装dependencies字段和devDependencies字段中的所有
 ### npm root
 
 查看当前包的安装路径。`npm root -g` 查看全局的包的安装路径。
+
+#### 查看使用的源
+
+`npm config get registry`。
+
+#### 查看包的所有版本
+
+`npm view 包名 versions`。
+
+#### 查看包的最新版本
+
+`npm view 包名 version`。
+
+## 修改 npm 源
+
+在项目根目录下新建 `.npmrc` 文件，并根据需要的源配置 registry 即可。
+
+```js
+// 淘宝源
+registry = 'https://registry.npm.taobao.org'
+
+// 官方源
+registry = 'https://registry.npmjs.org'
+```
+
+
+## npm 账号
+
+#### npm profile get
+
+查看个人账号信息。
+
+#### npm profile set <prop> <value>
+
+修改上述的个人信息。
+
+#### npm login
+
+登录 npm 账号。
+
+#### npm whoami
+
+查看当前的登录账号。
+
+#### npm publish
+
+发布新包。
+

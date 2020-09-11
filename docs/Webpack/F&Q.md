@@ -42,10 +42,6 @@ loader 是一个转换器，将 A 文件进行编译成 B 文件，比如将 A.l
 
 plugin 针对的是 loader 结束后 webpack 打包的整个过程。在 webpack 运行的生命周期中会广播出许多事件，plugin 可以监听这些事件，在合适的时机通过 webpack 提供的 API 改变输出结果。它并不直接操作文件，而是基于事件机制工作，会监听 webpack 打包过程中的某些节点，执行广泛的任务。比如使用 plugin 来根据模板自动生成 HTML 代码并自动引用 CSS 和 JS 文件、将 JS 文件中引用的样式单独抽离成 CSS 文件等。
 
-### source map
-
-将编译、打包、压缩后的代码映射回源代码的过程。打包压缩后的代码不具备良好的可读性，想要调试源码就需要 soucre map。
-
 ## 文件打包命名时的 hash 分类
 
 - `[hash]`：基于整个项目内容计算而来，所有文件都共用这个 hash。一旦修改了某一个文件，hash 就会发生改变，会导致其他没有变化的文件的文件名也发生变化，从而使缓存失效。
@@ -54,6 +50,39 @@ plugin 针对的是 loader 结束后 webpack 打包的整个过程。在 webpack
 
 - `[contenthash]`：根据单独的每个文件内容来生成 contenthash，只要文件内容不变，则 contenthash 不变。
 
-## tree-shaking 原理
+## source map
+
+由于打包后的代码是经过压缩的，变量名等信息和源码里的是不一样的，因此不具备良好的可读性。此时如果想要调试源码的话就需要 source map 来映射打包后的代码和源码了。source map 简单来说就是一个 .map 文件，它用于存放源码和编译打包后代码的文件、行号、列号和变量名之间的映射关系。
+
+source map 的几个关键字：
+
+| 关键字 | 含义 | 
+| :--: | :--: | 
+| eval | 使用 eval 包裹代码 |
+| source-map | 生成 .map 文件 |
+| cheap | 不包含列信息，也不包括 loader 的 sourcemap |
+| module | 包括 loader 的 sourcemap |
+| inline | 将 .map 作为 DataURL 嵌入，不单独生成 .map 文件 |
+
+source map 分为几种模式，主要就是将上述的关键字进行组合。比如常使用的 cheap-eval-source-map 表示只包含行信息，并且得到的 source map 由 eval 执行；
+
+[阮一峰：JavaScript Source Map 详解](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)
+
+[打破砂锅问到底：详解Webpack中的sourcemap](https://segmentfault.com/a/1190000008315937)
+
+## tree-shaking
 
 只有 ES6 模块才能使用 tree-shaking，对于 CommonJS 是无法使用 tree-shaking 的。这是因为 tree-shaking 是静态分析的，在编译阶段就去判断每个模块和代码的使用情况，对于没有使用到的部分再做删除操作。而 CommonJS 可以动态 require 一个模块（基于判断来选择是否 require），只有执行后才知道引用的什么模块。
+
+tree-shaking 依赖于 ES6 的模块特性。在 ES6 中，模块导入只能作为顶层的语句出现，也就是说 ES6 模块间的依赖关系是确定的，和运行时的状态无关，所以可以进行可靠的静态分析。
+
+tree-shaking 主要删除了三种类型的代码：
+
+- 代码不会被执行，不可到达。
+
+- 代码执行的结果不会被使用到。
+
+- 代码只会影响到死变量即只读不写。
+
+
+[Webpack Tree shaking 深入探究](https://juejin.im/post/6844903687412776974)
