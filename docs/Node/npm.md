@@ -35,9 +35,15 @@ npm install默认会安装dependencies字段和devDependencies字段中的所有
 
 上面代码指定npm test，实际运行mocha test/。如果要通过npm test命令，将参数传到mocha，则参数之前要加上两个连词线。`$ npm run test -- anothertest.js` 等同于 `$ mocha test/ anothertest.js`。
 
+### npm outdated -g --depth=0
+
+查看有哪些全局安装的 npm 包需要更新。
+
 ### npm list -g
 
-查看全局已经安装过的node包。
+查看全局已经安装过的 npm 包。
+
+如果不想输出的信息过多的话，可以限制输出模块的层级，`npm list -g --depth 0`。
 
 ### npm config list
 
@@ -63,7 +69,7 @@ npm install默认会安装dependencies字段和devDependencies字段中的所有
 
 `npm view 包名 version`。
 
-## 修改 npm 源
+#### 修改 npm 源
 
 在项目根目录下新建 `.npmrc` 文件，并根据需要的源配置 registry 即可。
 
@@ -75,26 +81,28 @@ registry = 'https://registry.npm.taobao.org'
 registry = 'https://registry.npmjs.org'
 ```
 
-
 ## npm 账号
 
-#### npm profile get
+#### 查看个人账号信息
 
-查看个人账号信息。
+`npm profile get`。
 
-#### npm profile set <prop> <value>
+#### 修改上述的个人信息
 
-修改上述的个人信息。
+`npm profile set <prop> <value>`。
 
-#### npm login
+#### 登录 npm 账号
 
-登录 npm 账号。
+`npm login --auth-type=sso`。
 
-#### npm whoami
+#### 查看当前的登录账号
 
-查看当前的登录账号。
+`npm whoami`。
 
-#### npm publish
+#### 发布新包
 
-发布新包。
+`npm publish`。
 
+#### 删除包
+
+`npm unpublish --force <包名>`。
