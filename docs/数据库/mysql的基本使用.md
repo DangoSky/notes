@@ -26,6 +26,10 @@
 
 注意引号不能省略，如果只是访问本地数据库的话，主机则为 localhost。
 
+#### 修改账号密码
+
+`alter user '<用户名>'@'<主机/localhost>' identified by '<新密码>'`
+
 #### 查看所有用户列表
 
 使用 root 账号登录后，`select user, host from mysql.user`
@@ -42,7 +46,11 @@
 
 #### 创建数据库
 
-`CREATE DATABASE 数据库名`
+`create database 数据库名`
+
+#### 删除数据库
+
+`drop database 数据库名`
 
 #### 查看所有的数据库
 

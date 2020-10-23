@@ -91,6 +91,7 @@ module.exports = {
           '/Node/Socket.IO.md',
           '/Node/服务端渲染和客户端渲染.md',
           '/Node/koa.md',
+          '/Node/TypeOrm.md',
         ]
       }, {
         title: '数据库',
