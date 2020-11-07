@@ -4,6 +4,7 @@
   - 函数组件没有类组件中的 state，无法使用 state 并监测 state 变化做相应的渲染。对此 Hook 引入了 useState 使函数组件也可以有自己的 state。
   - 虽然函数组件没有了生命周期方法和创建类实例，节省了不必要的开销，但同时也无法在某些特定的时刻进行某些操作。对此 Hook 引入了 useEffect，可以在依赖改变时调用，如果依赖为空的话就相当于类的 componentDidMount 了。
 
+> [手写ReactHook核心原理](https://mp.weixin.qq.com/s?__biz=MzU5NDM5MDg1Mw==&mid=2247489248&idx=1&sn=b9ea39bdbbf012bf675352b011b5b162&chksm=fe00accac97725dc1db75e0908a3585b4a8bef16186c779be983ec73c631bf2f78343a0c08d4&mpshare=1&srcid=11014bpdNQPCvb156OEwmJMM&sharer_sharetime=1604196121318&sharer_shareid=4bdc7d4bd1af5e53e942566d21a430a1&scene=1&subscene=10000&clicktime=1604197742&enterid=1604197742&ascene=1&devicetype=android-29&version=27001353&nettype=3gnet&abtest_cookie=AAACAA%3D%3D&lang=zh_CN&exportkey=AWIne1omkJkDZtHdU48WgT0%3D&pass_ticket=6pgjYUk6ocWOBXsoqT1ShfqjYzbG9uSjvFHywJlIAC%2FWuxhwRHVp%2BMU40Qc5FCoV&wx_header=1)
 
 ## 常用的 Hook
 

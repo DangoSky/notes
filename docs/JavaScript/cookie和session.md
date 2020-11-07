@@ -138,7 +138,9 @@ Session 扩展性不好，服务器集群之间难以共享。虽然可以将 Se
 - JWT 本身包含了认证信息，一旦泄露，任何人都可以获得该令牌的所有权限。为了减少盗用，JWT 的有效期应该设置得比较短。对于一些比较重要的权限，使用时应该再次对用户进行认证。
 - 为了减少盗用，JWT 不应该使用 HTTP 协议明文传输，要使用 HTTPS 协议传输。
 
-> [更多参考](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
+> [JSON Web Token 入门教程](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
+
+> [使用NodeJS实现JWT原理](https://juejin.im/post/6873700061000237069)
 
 #### JWT 的缺点
 

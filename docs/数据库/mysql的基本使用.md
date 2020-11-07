@@ -20,6 +20,8 @@
 
 也可以简化成 `mysql -u 用户名 -p`。
 
+如果提示报 `command not found: mysql` 的错误，试试运行 `source ~/.bash_profile` 命令再看看。
+
 #### 创建用户
 
 `create user 用户名@'主机' identified by '密码'`
