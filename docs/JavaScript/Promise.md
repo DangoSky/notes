@@ -69,6 +69,30 @@ new Promise((resolve, reject) => {
   2. 异步操作失败，Promise 实例抛出一个错误（error），状态变为 rejected。
 
 
+- **跳转逻辑**
+  - resolve 后，会将 resolve 出来的值传递给 then 参数，最后 promise 的结果等于 then 返回的值。
+  - reject 或 throw 后，会将值传递给 catch 参数，最后 promise 的结果等于 catch 返回的值。
+
+```js
+async function fn() {
+  let p = await new Promise((resolve, reject) => {
+    // reject(1);
+    // resolve(1);
+    // throw 4;
+  }).then(data => {
+    console.log('then= ', data);
+    return 2;
+  }).catch(err => {
+    console.log('err = ', err);
+    return 3;
+  })
+
+  console.log('p = ', p);
+}
+
+fn();
+```
+
 ## 错误处理
 - 跟传统的 try/catch 代码块不同的是，如果没有使用 catch 方法指定错误处理的回调函数，Promise 对象抛出的错误不会传递到外层代码，即不会有任何反应。
 
