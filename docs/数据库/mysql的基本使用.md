@@ -2,6 +2,14 @@
 
 ## 常用操作
 
+#### 查看数据库状态
+
+`service mysqld status`
+
+#### 重启数据库
+
+`service mysqld restart`
+
 #### 启动数据库
 
 在安装 MySQL 目录下 bin 文件夹里运行 `net stat mysq` 启动，对应的关闭命令是 `net stop mysql`。
